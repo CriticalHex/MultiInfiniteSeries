@@ -4,22 +4,23 @@
 
 using namespace std;
 
-long double f(unsigned long long int n) {
+long double f(uint64_t n) {
+	//return pow(-1, n - 1) * (4 / (long double)((2 * n) - 1));
 	return 1 / pow(n, (long double)1.25);
 }
 
-void sum(long double partialSums[], unsigned long long int i, unsigned long long int start, unsigned long long int stop) {
-	for (unsigned long long int n = start; n < stop; n++) {
+void sum(long double partialSums[], uint64_t i, uint64_t start, uint64_t stop) {
+	for (uint64_t n = start; n < stop; n++) {
 		partialSums[i] += f(n);
 	}
 }
 
-void spawnThreads(list<thread>& threads, const int nThreads, long double partialSums[], unsigned long long int end) {
-	unsigned long long int start;
-	unsigned long long int stop;
-	unsigned long long int blockSize = end / ((uint64_t)nThreads + 1);
+void spawnThreads(list<thread>& threads, const int nThreads, long double partialSums[], uint64_t end) {
+	uint64_t start;
+	uint64_t stop;
+	uint64_t blockSize = end / ((uint64_t)nThreads + 1);
 	cout << "Spawning threads..." << endl;
-	for (unsigned long long int i = 0; i < nThreads; i++) {
+	for (uint64_t i = 0; i < nThreads; i++) {
 		start = (i + 1) * blockSize;
 		stop = (i + 2) * blockSize;
 		//cout << "[" << start << ", " << stop << "]" << endl;
@@ -56,8 +57,8 @@ int main() {
 	long double partialSums[nThreads];
 	long double Sn = 0;
 	list<thread> threads;
-	cout.precision(8);
-	for (unsigned long long int max = (uint64_t)nThreads + 1; max < ULLONG_MAX; max *= (uint64_t)nThreads + 1) {
+	cout.precision(18);
+	for (uint64_t max = (uint64_t)nThreads + 1; max < ULLONG_MAX; max *= (uint64_t)nThreads + 1) {
 		cout << "Iterations: "; printIters(max - 1);
 		spawnThreads(threads, nThreads, partialSums, max);
 		cout << "|";
