@@ -60,7 +60,7 @@ int main() {
 	long double Sn = 0;
 	list<thread> threads;
 	const auto before = chrono::system_clock::now();
-	cout.precision(18);
+	cout.precision(8);
 	for (uint64_t max = (uint64_t)nThreads + 1; max < ULLONG_MAX; max *= (uint64_t)nThreads + 1) {
 		cout << "Iterations: "; printIters(max - 1);
 		spawnThreads(threads, nThreads, partialSums, max);
