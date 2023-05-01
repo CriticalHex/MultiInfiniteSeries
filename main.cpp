@@ -1,8 +1,10 @@
 #include<iostream>
 #include<list>
 #include<thread>
+#include<chrono>
 
 using namespace std;
+using sec = chrono::duration<double>;
 
 long double f(unsigned long long int n) {
 	return 1 / pow(n, (long double)1.25);
@@ -56,6 +58,7 @@ int main() {
 	long double partialSums[nThreads];
 	long double Sn = 0;
 	list<thread> threads;
+	const auto before = chrono::system_clock::now();
 	cout.precision(8);
 	for (unsigned long long int max = (uint64_t)nThreads + 1; max < ULLONG_MAX; max *= (uint64_t)nThreads + 1) {
 		cout << "Iterations: "; printIters(max - 1);
@@ -67,11 +70,13 @@ int main() {
 				cout << "-";
 			}
 		}
+		const sec duration = chrono::system_clock::now() - before;
 		cout << "|" << endl;
 		for (long double partial : partialSums) {
 			Sn += partial;
 		}
-		cout << "Result: " << Sn << endl << endl;
+		cout << "Result: " << Sn << endl;
+		cout << "Time elapsed: " << duration.count() << "s" << endl << endl;
 		zero(partialSums, nThreads);
 	}
 }
